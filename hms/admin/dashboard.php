@@ -107,32 +107,18 @@ $num_rows1 = mysqli_num_rows($result1);
 											
 											<p class="links cl-effect-1">
 												<a href="manage-patient.php">
-<?php $result = mysqli_query($con,"SELECT * FROM tblpatient ");
-$num_rows = mysqli_num_rows($result);
-{
-?>
-Total Patients :<?php echo htmlentities($num_rows);  
-} ?>		
-</a>
+	<?php $result = mysqli_query($con,"SELECT * FROM tblpatient ");
+	$num_rows = mysqli_num_rows($result);
+	{
+	?>
+	Total Patients :<?php echo htmlentities($num_rows);  
+	} ?>		
+	</a>
 											</p>
 										</div>
 									</div>
 								</div>
-
-
-
-
-
-			
-
-
-							
-					
-			
-					
-					
-						
-						
+	
 					
 						<!-- end: SELECT BOXES -->
 						
@@ -144,7 +130,7 @@ Total Patients :<?php echo htmlentities($num_rows);
 			<!-- end: FOOTER -->
 		
 			<!-- start: SETTINGS -->
-	<?php include('include/setting.php');?>
+	
 		
 			<!-- end: SETTINGS -->
 		</div>

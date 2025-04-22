@@ -17,7 +17,7 @@ if (strlen($_SESSION['id']) == 0) {
 </head>
 <body>
 <div id="app">
-    <?php include('include/sidebar.php'); ?>
+  
     <div class="app-content">
         <?php include('include/header.php'); ?>
         <div class="main-content">

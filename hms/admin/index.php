@@ -84,10 +84,7 @@ $_SESSION['errmsg']="Invalid username or password";
 						</fieldset>
 					</form>
 
-					<div class="copyright">
-						<span class="text-bold text-uppercase">Hospital Management System</span>
-					</div>
-			
+					
 				</div>
 
 			</div>

@@ -29,9 +29,11 @@ if (isset($_POST['submit'])) {
     if ($stmt->num_rows > 0) {
         echo "<script>alert('Email already exists! Please use another email.');</script>";
     } else {
+        $docid = $_SESSION['id']; // Get doctor ID from session
         // Insert into tblpatient (without Docid)
-        $stmt = $con->prepare("INSERT INTO tblpatient (PatientName, PatientContno, PatientEmail, PatientGender, PatientAdd, PatientAge, PatientMedhis) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssis", $patname, $patcontact, $patemail, $gender, $pataddress, $patage, $medhis);
+        $stmt = $con->prepare("INSERT INTO tblpatient (Docid, PatientName, PatientContno, PatientEmail, PatientGender, PatientAdd, PatientAge, PatientMedhis) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssssis", $docid, $patname, $patcontact, $patemail, $gender, $pataddress, $patage, $medhis);
+        
         $success1 = $stmt->execute();
 
         // Insert into users table
@@ -74,9 +76,9 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
     <div id="app">
-        <?php include('include/sidebar.php'); ?>
+        
         <div class="app-content">
-            <?php include('include/header.php'); ?>
+            <?php include('include/header.php');?>
             <div class="main-content">
                 <div class="container-fluid container-fullw bg-white">
                     <div class="row">
@@ -120,7 +122,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
-        <?php include('include/footer.php'); ?>
+      
     </div>
 </body>
 </html>
