@@ -23,6 +23,23 @@ $medicinePrices = [
     "TabletD" => 20,
 ];
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_stock_ajax'])) {
+    $medicines = $_POST['medicineName'];
+    $quantities = $_POST['quantity'];
+
+    foreach ($medicines as $index => $medicineName) {
+        $qty = intval($quantities[$index]);
+        if ($qty > 0) {
+            $stmt = $con->prepare("UPDATE tblmedicine_stock SET quantityavailable = quantityavailable - ? WHERE medicinename = ?");
+            $stmt->bind_param("is", $qty, $medicineName);
+            $stmt->execute();
+        }
+    }
+
+    echo json_encode(['success' => true]);
+    exit;
+}
+
 // Check if AJAX request for QR code generation is received
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_qr_ajax'])) {
     $medicines = $_POST['medicineName'];
@@ -242,8 +259,40 @@ if (isset($_GET['scan_qr']) && $_GET['scan_qr'] == 'true') {
                 "description": "Prescription Payment",
                 "image": "logo.png",
                 "handler": function (response) {
-                    alert("Payment Successful. Now generating QR Code...");
-                    $('#generatePrescriptionButton').show();
+                    alert("Payment Successful. Updating stock...");
+
+                    var medicines = [];
+                    var quantities = [];
+
+                    // Collect medicines and quantities from the form
+                    $('input[name="medicineName[]"]').each(function () {
+                        medicines.push($(this).val());
+                    });
+                    $('select[name="quantity[]"]').each(function () {
+                        quantities.push($(this).val());
+                    });
+
+                    $.ajax({
+                        url: '', // same page
+                        type: 'POST',
+                        data: {
+                            update_stock_ajax: true,
+                            medicineName: medicines,
+                            quantity: quantities
+                        },
+                        success: function (res) {
+                            var result = JSON.parse(res);
+                            if (result.success) {
+                                alert("Stock updated successfully. Now you can generate the QR code.");
+                                $('#generatePrescriptionButton').show();
+                            } else {
+                                alert("Stock update failed.");
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while updating stock.");
+                        }
+                    });
                 },
                 "prefill": {
                     "name": "<?php echo $patientName; ?>",
@@ -302,6 +351,5 @@ if (isset($_GET['scan_qr']) && $_GET['scan_qr'] == 'true') {
         $('#qrModal').hide();
     }
 </script>
-
 </body>
 </html>

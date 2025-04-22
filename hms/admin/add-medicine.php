@@ -2,17 +2,30 @@
 session_start();
 error_reporting(0);
 include('include/config.php');
-if(strlen($_SESSION['id']==0)) {
- header('location:logout.php');
-  } else{
+if (strlen($_SESSION['id'] == 0)) {
+	header('location:logout.php');
+} else {
+	if (isset($_POST['submit'])) {
+		$medicinename = mysqli_real_escape_string($con, $_POST['medname']);
+		$quantity = intval($_POST['qty']);
 
+		$sql = mysqli_query($con, "INSERT INTO tblmedicine_stock (medicinename, quantityavailable) VALUES ('$medicinename', '$quantity')");
 
+		if ($sql) {
+			echo "<script>alert('Medicine info added successfully');</script>";
+			echo "<script>window.location.href ='manage-medicine.php'</script>";
+		} else {
+			$error = mysqli_error($con);
+			echo "<script>alert('Insert failed: " . htmlspecialchars($error, ENT_QUOTES) . "');</script>";
+		}
+	}
 ?>
-<!DOCTYPE html>
-<html lang="en">
+	<!DOCTYPE html>
+	<html lang="en">
+
 	<head>
-		<title>Admin  | Dashboard</title>
-		
+		<title>Admin | Add Medicine</title>
+
 		<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
 		<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" href="vendor/fontawesome/css/font-awesome.min.css">
@@ -27,128 +40,128 @@ if(strlen($_SESSION['id']==0)) {
 		<link rel="stylesheet" href="assets/css/styles.css">
 		<link rel="stylesheet" href="assets/css/plugins.css">
 		<link rel="stylesheet" href="assets/css/themes/theme-1.css" id="skin_color" />
+		<script type="text/javascript">
+			function valid() {
+				if (document.adddoc.npass.value != document.adddoc.cfpass.value) {
+					alert("Password and Confirm Password Field do not match  !!");
+					document.adddoc.cfpass.focus();
+					return false;
+				}
+				return true;
+			}
+		</script>
 
 
+		<script>
+			function checkemailAvailability() {
+				$("#loaderIcon").show();
+				jQuery.ajax({
+					url: "check_availability.php",
+					data: 'emailid=' + $("#docemail").val(),
+					type: "POST",
+					success: function(data) {
+						$("#email-availability-status").html(data);
+						$("#loaderIcon").hide();
+					},
+					error: function() {}
+				});
+			}
+		</script>
 	</head>
+
 	<body>
-		<div id="app">		
-<?php include('include/sidebar.php');?>
+		<div id="app">
+			<?php include('include/sidebar.php'); ?>
 			<div class="app-content">
-				
-						<?php include('include/header.php');?>
-						
+
+				<?php include('include/header.php'); ?>
+
 				<!-- end: TOP NAVBAR -->
-				<div class="main-content" >
+				<div class="main-content">
 					<div class="wrap-content container" id="container">
 						<!-- start: PAGE TITLE -->
 						<section id="page-title">
 							<div class="row">
 								<div class="col-sm-8">
-									<h1 class="mainTitle">Admin | Dashboard</h1>
-																	</div>
+									<h1 class="mainTitle">Admin | Add Medicine</h1>
+								</div>
 								<ol class="breadcrumb">
 									<li>
 										<span>Admin</span>
 									</li>
 									<li class="active">
-										<span>Dashboard</span>
+										<span>Add Medicine</span>
 									</li>
 								</ol>
 							</div>
 						</section>
 						<!-- end: PAGE TITLE -->
 						<!-- start: BASIC EXAMPLE -->
-							<div class="container-fluid container-fullw bg-white">
+						<div class="container-fluid container-fullw bg-white">
 							<div class="row">
-								<div class="col-sm-2	">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Manage Users</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="manage-users.php">
-												<?php $result = mysqli_query($con,"SELECT * FROM users ");
-$num_rows = mysqli_num_rows($result);
-{
-?>
-											Total Users :<?php echo htmlentities($num_rows);  } ?>		
-												</a>
-											</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-2">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-users fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Manage Doctors</h2>
-										
-											<p class="cl-effect-1">
-												<a href="manage-doctors.php">
-												<?php $result1 = mysqli_query($con,"SELECT * FROM doctors ");
-$num_rows1 = mysqli_num_rows($result1);
-{
-?>
-											Total Doctors :<?php echo htmlentities($num_rows1);  } ?>		
-												</a>
-												
-											</p>
-										</div>
-									</div>
-								</div>
-								
+								<div class="col-md-12">
 
-<div class="col-sm-2">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Manage Patients</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="manage-patient.php">
-	<?php $result = mysqli_query($con,"SELECT * FROM tblpatient ");
-	$num_rows = mysqli_num_rows($result);
-	{
-	?>
-	Total Patients :<?php echo htmlentities($num_rows);  
-	} ?>		
-	</a>
-											</p>
+									<div class="row margin-top-30">
+										<div class="col-lg-8 col-md-12">
+											<div class="panel panel-white">
+												<div class="panel-heading">
+													<h5 class="panel-title">Add Medicine</h5>
+												</div>
+												<div class="panel-body">
+
+													<form role="form" name="adddoc" method="post" onSubmit="return valid();">
+														<div class="form-group">
+															<label for="medicine name">
+																Medicine Name
+															</label>
+															<input type="text" name="medname" class="form-control" placeholder="Enter Medicine Name" required="true">
+														</div>
+														<div class="form-group">
+															<label for="fess">
+																Quantity
+															</label>
+															<input type="text" name="qty" class="form-control" placeholder="Enter Medicine quantity" required="true">
+														</div>
+														<button type="submit" name="submit" id="submit" class="btn btn-o btn-primary">
+															Submit
+														</button>
+													</form>
+												</div>
+											</div>
 										</div>
+
 									</div>
 								</div>
-								<div class="col-sm-2">
-									<div class="panel panel-white no-radius text-center">
-										<div class="panel-body">
-											<span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-smile-o fa-stack-1x fa-inverse"></i> </span>
-											<h2 class="StepTitle">Manage Medicine</h2>
-											
-											<p class="links cl-effect-1">
-												<a href="manage-medicine.php">
-												<?php $result = mysqli_query($con,"SELECT * FROM tblmedicine_stock ");
-$num_rows = mysqli_num_rows($result);
-{
-?>
-											Total Medicine :<?php echo htmlentities($num_rows);  } ?>		
-												</a>
-											</p>
-										</div>
+								<div class="col-lg-12 col-md-12">
+									<div class="panel panel-white">
+
+
 									</div>
 								</div>
-						<!-- end: SELECT BOXES -->
-						
+							</div>
+						</div>
 					</div>
 				</div>
+				<!-- end: BASIC EXAMPLE -->
+
+
+
+
+
+
+				<!-- end: SELECT BOXES -->
+
 			</div>
-			<!-- start: FOOTER -->
-	<?php include('include/footer.php');?>
-			<!-- end: FOOTER -->
-		
-			<!-- start: SETTINGS -->
-	
-		
-			<!-- end: SETTINGS -->
+		</div>
+		</div>
+		<!-- start: FOOTER -->
+		<?php include('include/footer.php'); ?>
+		<!-- end: FOOTER -->
+
+		<!-- start: SETTINGS -->
+		<?php include('include/setting.php'); ?>
+
+		<!-- end: SETTINGS -->
 		</div>
 		<!-- start: MAIN JAVASCRIPTS -->
 		<script src="vendor/jquery/jquery.min.js"></script>
@@ -181,5 +194,6 @@ $num_rows = mysqli_num_rows($result);
 		<!-- end: JavaScript Event Handlers for this page -->
 		<!-- end: CLIP-TWO JAVASCRIPTS -->
 	</body>
-</html>
+
+	</html>
 <?php } ?>

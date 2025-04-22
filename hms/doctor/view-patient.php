@@ -4,6 +4,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include('include/config.php');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prescription'])) {
+    $prescription = mysqli_real_escape_string($con, $_POST['prescription']);
+    $query = "SELECT quantityavailable FROM tblmedicine_stock WHERE medicinename = '$prescription'";
+    $result = mysqli_query($con, $query);
+
+    $data = [];
+
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $data['quantity'] = $row['quantityavailable'];
+    } else {
+        $data['quantity'] = '';
+    }
+
+    echo json_encode($data);
+    exit(); 
+}
 
 if (strlen($_SESSION['id']) == 0) {
     header('location:logout.php');
@@ -19,6 +36,14 @@ if (strlen($_SESSION['id']) == 0) {
         $MedTime = $MedicineTime;
         $qr_scanned = 0; // Default value
 
+        $query = "SELECT quantityavailable FROM tblmedicine_stock WHERE medicinename = '$MedicalPres'";
+        $result = mysqli_query($con, $query);
+        $row = mysqli_fetch_assoc($result);
+        if($row['quantityavailable']< $MedicineQuantity)
+        {
+            echo '<script>alert("Please enter a value under available medicine quantity: ' . $row['quantityavailable'] . '");</script>';
+            exit();
+        }
        $stmt = $con->prepare("INSERT INTO tblmedicalhistory (PatientID, MedicalPres, QRCodePath, MaxQuantity, Quantity, MedicineQuantity, MedicineTime, qr_scanned) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
        
@@ -163,7 +188,7 @@ if (strlen($_SESSION['id']) == 0) {
                                                         <tr>
                                                             <th>Medicine Quantity :</th>
                                                             <td>
-                                                                <input name="medicineQuantity" type="number" class="form-control" required>
+                                                                <input id="medicineQuantity" name="medicineQuantity" type="number" class="form-control" required>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -190,11 +215,44 @@ if (strlen($_SESSION['id']) == 0) {
                 </div>
             </div>
         </div>
-
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="assets/js/main.js"></script>
     </div>
+    <script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+$(document).ready(function () {
+    $('select[name="pres"]').on('change', function () {
+        var selectedPrescription = $(this).val();
+
+        if (selectedPrescription !== '') {
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: { prescription: selectedPrescription },
+                success: function (response) {
+                    try {
+                        var data = JSON.parse(response);
+                        if (data.quantity !== undefined) {
+                            $('#medicineQuantity').val(data.quantity);
+                        } else {
+                            $('#medicineQuantity').val('');
+                        }
+                    } catch (e) {
+                        console.error('Invalid JSON:', response);
+                        $('#medicineQuantity').val('');
+                    }
+                },
+                error: function () {
+                    console.error('AJAX error');
+                    $('#medicineQuantity').val('');
+                }
+            });
+        } else {
+            $('#medicineQuantity').val('');
+        }
+    });
+});
+</script>
 </body>
 </html>
 

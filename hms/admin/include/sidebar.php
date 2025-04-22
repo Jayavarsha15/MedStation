@@ -92,7 +92,32 @@
 									</li>
 									
 								</ul>
-								</li>	
+								</li>
+								<li>
+								<a href="javascript:void(0)">
+									<div class="item-content">
+										<div class="item-media">
+											<i class="ti-user"></i>
+										</div>
+										<div class="item-inner">
+											<span class="title"> Medicine </span><i class="icon-arrow"></i>
+										</div>
+									</div>
+								</a>
+								<ul class="sub-menu">
+									<li>
+										<a href="add-medicine.php">
+											<span class="title"> Add Medicine</span>
+										</a>
+									</li>
+									<li>
+										<a href="manage-medicine.php">
+											<span class="title"> Manage Medicine </span>
+										</a>
+									</li>
+									
+								</ul>
+								</li>		
 	
 
 
