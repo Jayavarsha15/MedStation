@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                                 <input type="password" class="form-control password" name="password" placeholder="Password" required>
                                 <i class="fa fa-lock"></i>
                             </span>
-                            <a href="forgot-password.php">Forgot Password?</a>
+                           
                         </div>
 
                         <div class="form-actions">
@@ -96,9 +96,7 @@ if (isset($_POST['submit'])) {
                     </fieldset>
                 </form>
 
-                <div class="copyright">
-                    <span class="text-bold text-uppercase"> Hospital Management System</span>
-                </div>
+               
             </div>
         </div>
     </div>

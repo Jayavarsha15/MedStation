@@ -33,10 +33,7 @@ if(strlen($_SESSION['id']==0)) {
 		<div id="app">		
 <?php include('include/sidebar.php');?>
 			<div class="app-content">
-				
-						<?php include('include/header.php');?>
-						
-				<!-- end: TOP NAVBAR -->
+				<?php include('include/header.php');?>
 				<div class="main-content" >
 					<div class="wrap-content container" id="container">
 						<!-- start: PAGE TITLE -->
@@ -91,10 +88,7 @@ if(strlen($_SESSION['id']==0)) {
 	<?php include('include/footer.php');?>
 			<!-- end: FOOTER -->
 		
-			<!-- start: SETTINGS -->
-	<?php include('include/setting.php');?>
 			
-			<!-- end: SETTINGS -->
 		</div>
 		<!-- start: MAIN JAVASCRIPTS -->
 		<script src="vendor/jquery/jquery.min.js"></script>

@@ -105,9 +105,7 @@ if (isset($_POST['submit'])) {
                                 Login <i class="fa fa-arrow-circle-right"></i>
                             </button>
                         </div>
-                        <div class="new-account">
-                            Don't have an account yet? <a href="registration.php">Create an account</a>
-                        </div>
+                        
                     </fieldset>
                 </form>
 

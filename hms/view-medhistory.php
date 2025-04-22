@@ -107,7 +107,7 @@ if (isset($_GET['scan_qr']) && $_GET['scan_qr'] == 'true') {
 </head>
 <body>
 <div id="app">
-    <?php include('include/sidebar.php'); ?>
+    
     <div class="app-content">
         <?php include('include/header.php'); ?>
         <div class="main-content">
@@ -214,7 +214,7 @@ if (isset($_GET['scan_qr']) && $_GET['scan_qr'] == 'true') {
         </div>
     </div>
     <?php include('include/footer.php'); ?>
-    <?php include('include/setting.php'); ?>
+   
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
